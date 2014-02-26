@@ -1,5 +1,7 @@
 module Robotics
 
-# package code goes here
+include("utils.jl")
+include("geometry.jl")
+include("dynamics.jl")
 
 end # module
