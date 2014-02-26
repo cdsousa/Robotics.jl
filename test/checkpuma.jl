@@ -79,8 +79,7 @@ T_ok = [-0.655113870655343 -0.474277925274361 -0.588120962109346 0.0540498757911
 
 g = [0, 0, -9.81]
 
-V_test, dV_test = rne_park_forward(q_test, dq_test, ddq_test, g, Ti_inv_test, S_test);
-tau_test = rne_park_backward(Ti_inv_test, S_test, L, l, m, V_test, dV_test);
+tau_test = rne_park(q_test, dq_test, ddq_test, Ti_inv_test, S_test, g, L, l, m,);
 
 tau_ok = [  0.986185688341252
              16.1055550633721
