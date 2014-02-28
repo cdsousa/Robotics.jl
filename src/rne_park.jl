@@ -32,7 +32,7 @@ function adjdual(g, h)
 end
 
 
-function rne_park_forward(q, dq, ddq, g, Ti_inv, S, ifunc=identity)
+function rne_park_forward(q, dq, ddq, Ti_inv, S, g, ifunc=identity)
 
     typ = eltype(q)
     dof = length(q)
@@ -56,13 +56,13 @@ function rne_park_forward(q, dq, ddq, g, Ti_inv, S, ifunc=identity)
     V, dV
 end
 
-function rne_park_backward(Ti_inv, S, L, l, m, V, dV, ifunc=identity)
+function rne_park_backward(Tdh_inv, S, L, l, m, V, dV, ifunc=identity)
 
     typ = eltype(m)
     dof = length(m)
 
-    # extend Ti_inv so that Ti_inv[dof+1] return identity
-    Ti_inv = array(Ti_inv..., eye(typ, 4))
+    # extend Tdh_inv so that Tdh_inv[dof+1] return identity
+    Tdh_inv = array(Tdh_inv..., eye(typ, 4))
 
     F = [Array(typ, 6) for _ in 1:dof+1]
 
@@ -75,7 +75,7 @@ function rne_park_backward(Ti_inv, S, L, l, m, V, dV, ifunc=identity)
         Llm = [       L[i]        skew(l[i])
                -skew(l[i]) m[i].*eye(typ, 3)]
 
-        F[i] = Adjdual(Ti_inv[i+1], F[i+1]) + Llm*dV[i+1] - adjdual(V[i+1],  Llm*V[i+1])
+        F[i] = Adjdual(Tdh_inv[i+1], F[i+1]) + Llm*dV[i+1] - adjdual(V[i+1],  Llm*V[i+1])
         F[i] = ifunc(F[i])
 
         tau[i] = ifunc( dot(S[i], F[i]) )
@@ -86,7 +86,7 @@ end
 
 
 function rne_park(q, dq, ddq, Ti_inv, S, g, L, l, m, ifunc=identity)
-    V, dV = rne_park_forward(q, dq, ddq, g, Ti_inv, S, ifunc)
+    V, dV = rne_park_forward(q, dq, ddq, Ti_inv, S, g, ifunc)
     tau = rne_park_backward(Ti_inv, S, L, l, m, V, dV, ifunc)
     tau
 end

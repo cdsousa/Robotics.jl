@@ -35,15 +35,18 @@ cI6 = [ .15e-3,  .15e-3,  .04e-3, 0.,   0.,   0.]
 cI = array(cI1, cI2, cI3, cI4, cI5, cI6)
 
 cI2sI(cI) = [cI[1], -cI[4], -cI[6], cI[2], -cI[5], cI[3]]
-sI = [cI2sI(ci) for ci in cI]
+I = [symm(cI2sI(ci)) for ci in cI]
 
+l = [m[i]*r[i] for i in 1:dof]
+L = [Symmetric(I[i] + m[i]*skew(r[i])'*skew(r[i])) for i in 1:dof]
 
 ### Dynamic parameters ###
 
-p = dynparams_canonical(m=m, r=r, sI=sI)
-L = p[:L]
-l = p[:l]
-m = p[:m]
+dp = OrderedDict([
+    (:L, L),
+    (:l, l),
+    (:m, m)
+    ])
 
 dynparms_ok = [0.0, -0, -0, 0.34999999999999998, -0, 0.0, 0.0, 0.0, 0.0, 0, 1.03118515, 0.037980719999999996, 1.4401022999999999,
                     3.7274564059999999, -0.023751000000000001, 2.8425240559999998, -6.33012, 0.10439999999999999, 3.9585, 17.4,
@@ -53,7 +56,7 @@ dynparms_ok = [0.0, -0, -0, 0.34999999999999998, -0, 0.0, 0.0, 0.0, 0.0, 0, 1.03
                     0.00040000000000000002, -0, 0.00029999999999999997, 0.0, 0.0, 0.0, 0.34, 0.00024216, -0, -0, 0.00024216, -0,
                     4.0000000000000003e-05, 0.0, 0.0, 0.0028799999999999997, 0.09]
 
-@test_approx_eq_eps dynparams2vect(m=m, L=L, l=l) dynparms_ok 1e-10
+@test_approx_eq_eps dynp_odict2vect(dp) dynparms_ok 1e-10
 
 
 ### Geometry ###
@@ -79,7 +82,7 @@ T_ok = [-0.655113870655343 -0.474277925274361 -0.588120962109346 0.0540498757911
 
 g = [0, 0, -9.81]
 
-tau_test = rne_park(q_test, dq_test, ddq_test, Ti_inv_test, S_test, g, L, l, m,);
+tau_test = rne_park(q_test, dq_test, ddq_test, Ti_inv_test, S_test, g, dp[:L], dp[:l], dp[:m]);
 
 tau_ok = [  0.986185688341252
              16.1055550633721
