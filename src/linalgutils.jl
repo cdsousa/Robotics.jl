@@ -1,5 +1,5 @@
 
-export observmat, coldepend
+export observmat, dependcol
 
 
 function observmat(T, m, n, func, otherargs=())
@@ -14,7 +14,7 @@ function observmat(T, m, n, func, otherargs=())
 end
 
 
-function coldepend(Hs, prec=10)
+function dependcol(Hs, prec=10)
     np = size(Hs, 2)
 
     Q1, R1 = qr(Hs)
@@ -31,7 +31,7 @@ function coldepend(Hs, prec=10)
     end
     dbn = length(dbi)
 
-    P = eye(np)[:, [dbi; ddi]]
+    P = eye(Int, np)[:, [dbi; ddi]]
     Pb = P[:, 1:dbn]
     Pd = P[:, dbn+1:end]
 
