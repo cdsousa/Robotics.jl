@@ -12,14 +12,14 @@ sympi = 2acos(Sym(0))
 
 import SymPy.cse
 
-function cse(e::Sym, order="none")
-    cseout = sympy_meth(:cse, e.x, order=order)
+function cse(e::Sym; symbols=nothing, order="none")
+    cseout = sympy_meth(:cse, e.x, symbols=symbols, order=order)
     (convert(Vector{(Sym,Sym)}, cseout[1]), cseout[2][1])
 end
 
-function cse(A::Array{Sym}, order="none")
+function cse(A::Array{Sym}; symbols=nothing, order="none")
     A = convert(SymMatrix, A)
-    cseout = sympy_meth(:cse, A.x, order=order)
+    cseout = sympy_meth(:cse, A.x, symbols=symbols, order=order)
     (convert(Vector{(Sym,Sym)}, cseout[1]), convert(Array{Sym}, cseout[2][1]))
 end
 
@@ -63,4 +63,5 @@ function genfunc(name, args::Vector, ret, ivs::Vector{(Sym,Sym)})
 end
 
 genfunc{T}(name, args::Vector, ret::(Vector{(Sym,Sym)}, T)) = genfunc(name, args::Vector, ret[2], ret[1])
+
 

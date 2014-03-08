@@ -1,4 +1,6 @@
 
+import Robotics: array, skew
+
 puma560_dhparams(q) =
     array([  pi/2,        0,         0,   q[1]],
           [     0,   0.4318,         0,   q[2]],

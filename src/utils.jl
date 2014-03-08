@@ -1,6 +1,4 @@
 
-export array, skew
-
 array{T}(x::T...) = T[x...]
 
 skew(v) =

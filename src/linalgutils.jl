@@ -7,7 +7,7 @@ function observmat(T, m, n, func, otherargs=())
     params = zeros(T, n)
     for i in 1:n
         params[i] = one(T)
-        H[:, i] = func(params, otherargs...)
+        H[:, i] = func(params, otherargs...)::Vector{T}
         params[i] = zero(T)
     end
     H
