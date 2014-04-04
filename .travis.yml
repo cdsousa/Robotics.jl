@@ -4,10 +4,10 @@ python:
 compiler:
   - clang
 notifications:
-  email: false
+  email: true
 env:
   matrix:
-    - JULIAVERSION="juliareleases"
+    #- JULIAVERSION="juliareleases"
     - JULIAVERSION="julianightlies"
 before_install:
   - sudo add-apt-repository ppa:staticfloat/julia-deps -y
@@ -17,5 +17,5 @@ before_install:
   - pip install sympy --use-mirrors
 script:
   - julia -e 'versioninfo(); Pkg.init(); Pkg.clone(pwd())'
-  #- julia -e 'Pkg.test("LinearExpressions")'
+  #- julia -e 'Pkg.test("Robotics")'
   - julia ./pkgtest.jl
