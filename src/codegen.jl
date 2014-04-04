@@ -1,10 +1,9 @@
 
-import Base: conj, sign
-
 export sympi, cse, jlcode, genfunc
 
-
 using SymPy
+import Base: conj, sign, dot
+
 conj(x::Sym) = sympy_meth(:conjugate, x)
 sign(x::Sym) = sympy_meth(:sign, x)
 sympi = 2acos(Sym(0))
