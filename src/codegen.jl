@@ -1,12 +1,19 @@
 
-export sympi, cse, jlcode, genfunc
+export cse, jlcode, genfunc, sympi
 
 using SymPy
-import Base: conj, sign, dot
+import Base: dot, conj, sign, zero, one
 
 conj(x::Sym) = sympy_meth(:conjugate, x)
 sign(x::Sym) = sympy_meth(:sign, x)
-sympi = 2acos(Sym(0))
+
+const _symzero = oftype(Sym, 0)
+zero(::Type{Sym}) = _symzero
+
+const _symone = oftype(Sym, 1)
+one(::Type{Sym}) = _symone
+
+const sympi = Sym(sympy.pi)
 
 
 import SymPy.cse
