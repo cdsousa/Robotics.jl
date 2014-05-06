@@ -37,12 +37,12 @@ cI6 = [ .15e-3,  .15e-3,  .04e-3, 0.,   0.,   0.]
 cI = array(cI1, cI2, cI3, cI4, cI5, cI6)
 
 cI2sI(cI) = [cI[1], -cI[4], -cI[6], cI[2], -cI[5], cI[3]]
-I = [vectosymm(cI2sI(ci)) for ci in cI]
+If = [vectosymm(cI2sI(ci)) for ci in cI]
 
 l = Vector{Float64}[m[i]*r[i] for i in 1:dof]
 
 symmetrize! = x->Base.LinAlg.copytri!(x, 'U')
-L = Matrix{Float64}[symmetrize!(I[i] + m[i]*skew(r[i])'*skew(r[i])) for i in 1:dof]
+L = Matrix{Float64}[symmetrize!(If[i] + m[i]*skew(r[i])'*skew(r[i])) for i in 1:dof]
 
 
 ### Dynamic parameters ###
