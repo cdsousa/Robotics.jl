@@ -2,9 +2,8 @@
 export cse, jlcode, genfunc, sympi
 
 using SymPy
-import Base: dot, conj, sign, zero, one
+import Base: dot, sign, zero, one
 
-conj(x::Sym) = sympy_meth(:conjugate, x)
 sign(x::Sym) = sympy_meth(:sign, x)
 
 const _symzero = oftype(Sym, 0)

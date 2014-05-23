@@ -7,7 +7,7 @@ vectosymm(U::AbstractVector) =
      U[3] U[5] U[6]]
 
 symmtovec(S::AbstractMatrix) =
-    vcat([S[i:end, i] for i in 1:size(S,1)]...)
+    [S[1,1], S[1,2], S[1,3], S[2,2], S[2,3], S[3,3]]
 
 
 immutable DynParmType{T} end
