@@ -1,4 +1,4 @@
-export vectosymm, symmtovec, dynp_init, dynp_vect2dict
+export vectosymm, symmtovec, dynp_init, dynp_vect2dict, dynp_dict2vect
 
 
 vectosymm(U::AbstractVector) =
@@ -75,4 +75,19 @@ function dynp_vect2dict{T}(v::AbstractVector{T}, ndof::Int, format::AbstractVect
     d
 end
 
+
+function dynp_dict2vect(d, format::AbstractVector{(Symbol, Symbol)})
+    ndof = length(d[format[1][1]])
+    vtype = eltype(eltype(d[format[1][1]]))
+
+    v = Array{vtype, 1}[[] for _ in 1:ndof]
+
+    for (s, typ) in format
+        x = d[s]
+        flat = flatter(DynParmType{typ})
+        for i in 1:ndof append!(v[i], flat(x[i])) end
+    end
+
+    vcat(v...)
+end
 
