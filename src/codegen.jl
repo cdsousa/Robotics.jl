@@ -2,17 +2,11 @@
 export cse, jlcode, genfunc, sympi
 
 using SymPy
-import Base: dot, sign, zero, one
+import Base: sign
 
 sign(x::Sym) = sympy_meth(:sign, x)
 
-const _symzero = oftype(Sym, 0)
-zero(::Type{Sym}) = _symzero
-
-const _symone = oftype(Sym, 1)
-one(::Type{Sym}) = _symone
-
-const sympi = Sym(sympy.pi)
+const sympi = SymPy.PI
 
 
 import SymPy.cse
@@ -50,7 +44,7 @@ assigntoarray(array::Symbol, exprmat::Matrix{Sym}) =
         [(i,j) for i in 1:size(exprmat,1), j in 1:size(exprmat,2)]]
 
 
-function genfunc(name, args::Vector, ret, ivs::Vector{(Sym,Sym)})
+function genfunc(name, args::Vector, ret, ivs::Vector{Tuple{Sym,Sym}})
     body_ivs = [Expr(:(=), jlcode(iv), jlcode(e)) for (iv,e) in ivs]
     if string(name)[end] == '!'
         out = symbol(args[1])
@@ -67,6 +61,4 @@ function genfunc(name, args::Vector, ret, ivs::Vector{(Sym,Sym)})
     end
 end
 
-genfunc{T}(name, args::Vector, ret::(Vector{(Sym,Sym)}, T)) = genfunc(name, args::Vector, ret[2], ret[1])
-
-
+genfunc{T}(name, args::Vector, ret::Tuple{Vector{Tuple{Sym,Sym}}, T}) = genfunc(name, args::Vector, ret[2], ret[1])

@@ -34,7 +34,7 @@ function dynp_init(;args...)
     ndof = length(args[1][2][1])
     vtype = eltype(eltype(args[1][2][1]))
 
-    format = (Symbol, Symbol)[]
+    format = Tuple{Symbol, Symbol}[]
     v = Array{vtype, 1}[[] for _ in 1:ndof]
 
     for (s, (x, typ)) in args
@@ -48,8 +48,8 @@ end
 
 
 
-function dynp_vect2dict{T}(v::AbstractVector{T}, ndof::Int, format::AbstractVector{(Symbol, Symbol)})
-    ndynpdof = length(v)/ndof
+function dynp_vect2dict{T}(v::AbstractVector{T}, ndof::Int, format::AbstractVector{Tuple{Symbol, Symbol}})
+    ndynpdof = div(length(v), ndof)
     if !isinteger(ndynpdof)
         throw("Lenght of dynamic parameter vector is not multiple of DOF number")
     end
@@ -76,7 +76,7 @@ function dynp_vect2dict{T}(v::AbstractVector{T}, ndof::Int, format::AbstractVect
 end
 
 
-function dynp_dict2vect(d, format::AbstractVector{(Symbol, Symbol)})
+function dynp_dict2vect(d, format::AbstractVector{Tuple{Symbol, Symbol}})
     ndof = length(d[format[1][1]])
     vtype = eltype(eltype(d[format[1][1]]))
 
@@ -90,4 +90,3 @@ function dynp_dict2vect(d, format::AbstractVector{(Symbol, Symbol)})
 
     vcat(v...)
 end
-
