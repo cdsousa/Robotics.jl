@@ -1,13 +1,13 @@
 
-import Robotics: array, skew
+import Robotics: skew
 
 puma560_dhparams(q) =
-    array([  pi/2,        0,         0,   q[1]],
+         [[  pi/2,        0,         0,   q[1]],
           [     0,   0.4318,         0,   q[2]],
           [ -pi/2,   0.0203,   0.15005,   q[3]],
           [  pi/2,        0,    0.4318,   q[4]],
           [ -pi/2,        0,         0,   q[5]],
-          [     0,        0,         0,   q[6]])
+          [     0,        0,         0,   q[6]]]
 
 dof = 6
 
@@ -25,7 +25,7 @@ r3 = [ -.0203,  -.0141,  .070]
 r4 = [ 0,    .019,    0]
 r5 = [0.,   0.,   0. ]
 r6 = [0.,   0.,   .032]
-r = array(r1, r2, r3, r4, r5, r6)
+r = [r1, r2, r3, r4, r5, r6]
 
 # %        Ixx     Iyy      Izz    -Ixy     -Iyz     -Ixz
 cI1 = [0.,      0.35,    0.,      0.,   0.,   0.]
@@ -34,7 +34,7 @@ cI3 = [ .066,    .086,    .0125,  0.,   0.,   0.]
 cI4 = [1.8e-3,  1.3e-3,  1.8e-3,  0.,   0.,   0.]
 cI5 = [ .3e-3,   .4e-3,   .3e-3,  0.,   0.,   0.]
 cI6 = [ .15e-3,  .15e-3,  .04e-3, 0.,   0.,   0.]
-cI = array(cI1, cI2, cI3, cI4, cI5, cI6)
+cI = [cI1, cI2, cI3, cI4, cI5, cI6]
 
 cI2sI(cI) = [cI[1], -cI[4], -cI[6], cI[2], -cI[5], cI[3]]
 If = [vectosymm(cI2sI(ci)) for ci in cI]

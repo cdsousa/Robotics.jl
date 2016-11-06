@@ -18,13 +18,13 @@ modified_dh_transfmat(α,a,d,θ) =
 
 inv_transfmat(A) =
     [A[1:3,1:3]'    -A[1:3,1:3]'*A[1:3,4]
-                                A[end, :]]
+                            A[end:end, :]]
 
 interlink_transfs_dhstd(params) = [standard_dh_transfmat(dhp...) for dhp in params]
 interlink_transfs_dhmod(params) = [modified_dh_transfmat(dhp...) for dhp in params]
 
 function transfs_tobase(Ti)
-    T = array(Ti[1])
+    T = [Ti[1]]
     for i in 2:length(Ti)
         push!(T, T[end] * Ti[i])
     end
@@ -49,5 +49,3 @@ _Lie_S_rot(α,a,d,θ) = [      0 -cos(α) sin(α)         0
 lie_S_rotjoint(α,a,d,θ) = unskew_SE3(_Lie_S_rot(α,a,d,θ))
 
 interlink_lie_S_rotjoint_dhstd(params) = [lie_S_rotjoint(dhp...) for dhp in params]
-
-

@@ -62,7 +62,7 @@ function rne_park_backward(Tdh_inv, S, L, l, m, V, dV, ifunc=identity)
     dof = length(m)
 
     # extend Tdh_inv so that Tdh_inv[dof+1] return identity
-    Tdh_inv = array(Tdh_inv..., eye(typ, 4))
+    Tdh_inv = [Tdh_inv..., eye(typ, 4)]
 
     F = [Array(typ, 6) for _ in 1:dof+1]
 
