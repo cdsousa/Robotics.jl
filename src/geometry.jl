@@ -3,18 +3,22 @@ export standard_dh_transfmat, modified_dh_transfmat, inv_transfmat,
     interlink_transfs_dhstd, interlink_transfs_dhmod, transfs_tobase,
     interlink_lie_S_rotjoint_dhstd
 
-standard_dh_transfmat(α,a,d,θ) =
-    [cos(θ) -sin(θ)*cos(α)  sin(θ)*sin(α) a*cos(θ)
-     sin(θ)  cos(θ)*cos(α) -cos(θ)*sin(α) a*sin(θ)
-     0              sin(α)         cos(α)        d
-     0                   0              0        1]
+function standard_dh_transfmat(α,a,d,θ)
+    T = promote_type(typeof(α), typeof(a), typeof(d), typeof(θ))
+    T[cos(θ) -sin(θ)*cos(α)  sin(θ)*sin(α) a*cos(θ)
+      sin(θ)  cos(θ)*cos(α) -cos(θ)*sin(α) a*sin(θ)
+      0              sin(α)         cos(α)        d
+      0                   0              0        1]
+end
 
 
-modified_dh_transfmat(α,a,d,θ) =
-    [       cos(θ)       -sin(θ)       0         a
-     sin(θ)*cos(α) cos(θ)*cos(α) -sin(α) -sin(α)*d
-     sin(θ)*sin(α) cos(θ)*sin(α)  cos(α)  cos(α)*d
-                 0             0       0         1]
+function modified_dh_transfmat(α,a,d,θ)
+    T = promote_type(typeof(α), typeof(a), typeof(d), typeof(θ))
+    T[       cos(θ)       -sin(θ)       0         a
+      sin(θ)*cos(α) cos(θ)*cos(α) -sin(α) -sin(α)*d
+      sin(θ)*sin(α) cos(θ)*sin(α)  cos(α)  cos(α)*d
+                  0             0       0         1]
+end
 
 inv_transfmat(A) =
     [A[1:3,1:3]'    -A[1:3,1:3]'*A[1:3,4]

@@ -27,7 +27,7 @@ const sympi = Sym(sympy[:pi])
 #     cseout = sympy_meth(:cse, A.x, symbols=symbols, order=order)
 #     (convert(Vector{Tuple{Sym,Sym}}, cseout[1]), convert(Array{Sym}, cseout[2][1]))
 # end
-retype_cse(symcode) = ([symcode[1]...], [x for x in symcode[2]])
+retype_cse(symcode) = (convert(Vector{Tuple{Sym,Sym}}, symcode[1]), [x for x in symcode[2]])
 export retype_cse
 
 
