@@ -37,8 +37,8 @@ function rne_park_forward(q, dq, ddq, Ti_inv, S, g, ifunc=identity)
     typ = eltype(q)
     dof = length(q)
 
-    V = [Array(typ, 6) for _ in 1:dof+1]
-    dV = [Array(typ, 6) for _ in 1:dof+1]
+    V = [Array{typ}(undef, 6) for _ in 1:dof+1]
+    dV = [Array{typ}(undef, 6) for _ in 1:dof+1]
 
     V[1] = zeros(typ, 6)
     dV[1] = [zeros(typ, 3); -g]
@@ -62,9 +62,9 @@ function rne_park_backward(Tdh_inv, S, L, l, m, V, dV, ifunc=identity)
     dof = length(m)
 
     # extend Tdh_inv so that Tdh_inv[dof+1] return identity
-    Tdh_inv = [Tdh_inv..., eye(typ, 4)]
+    Tdh_inv = [Tdh_inv..., Matrix{Int}(I, 4, 4)]
 
-    F = [Array(typ, 6) for _ in 1:dof+1]
+    F = [Array{typ}(undef, 6) for _ in 1:dof+1]
 
     F[dof+1] = zeros(typ, 6)
 
@@ -73,7 +73,7 @@ function rne_park_backward(Tdh_inv, S, L, l, m, V, dV, ifunc=identity)
     # Backward
     for i in reverse(1:dof)
         Llm = [       L[i]        skew(l[i])
-               -skew(l[i]) m[i].*eye(typ, 3)]
+               -skew(l[i]) m[i].*Matrix{Int}(I, 3, 3)]
 
         F[i] = Adjdual(Tdh_inv[i+1], F[i+1]) + Llm*dV[i+1] - adjdual(V[i+1],  Llm*V[i+1])
         F[i] = ifunc(F[i])

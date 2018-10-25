@@ -10,7 +10,7 @@ symmtovec(S::AbstractMatrix) =
     [S[1,1], S[1,2], S[1,3], S[2,2], S[2,3], S[3,3]]
 
 
-immutable DynParmType{T} end
+abstract type DynParmType{T} end
 
 flatter(::Type{DynParmType{:scalar}}) = x->[x]
 flatter(::Type{DynParmType{:vec3}}) = identity
@@ -31,13 +31,13 @@ dynplen(::Type{DynParmType{:symm3}}) = 6
 
 
 function dynp_init(;args...)
-    ndof = length(args[1][2][1])
-    vtype = eltype(eltype(args[1][2][1]))
+    ndof = length(args[1][1])
+    vtype = eltype(eltype(args[1][1]))
 
     format = Tuple{Symbol, Symbol}[]
     v = Array{vtype, 1}[[] for _ in 1:ndof]
 
-    for (s, (x, typ)) in args
+    for (s, (x, typ)) in pairs(args)
         flat = flatter(DynParmType{typ})
         for i in 1:ndof append!(v[i], flat(x[i])) end
         push!(format, (s, typ))
@@ -48,7 +48,7 @@ end
 
 
 
-function dynp_vect2dict{T}(v::AbstractVector{T}, ndof::Int, format::AbstractVector{Tuple{Symbol, Symbol}})
+function dynp_vect2dict(v::AbstractVector{T}, ndof::Int, format::AbstractVector{Tuple{Symbol, Symbol}}) where T
     ndynpdof = div(length(v), ndof)
     if !isinteger(ndynpdof)
         throw("Lenght of dynamic parameter vector is not multiple of DOF number")

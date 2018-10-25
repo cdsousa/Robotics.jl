@@ -2,7 +2,8 @@
 export cse, jlcode, genfunc, sympi
 
 using SymPy
-import Base: dot, sign #, zero, one
+import Base: sign #, zero, one
+import LinearAlgebra: dot
 
 sign(x::Sym) = sympy_meth(:sign, x)
 
@@ -12,7 +13,7 @@ sign(x::Sym) = sympy_meth(:sign, x)
 # const _symone = oftype(Sym, 1)
 # one(::Type{Sym}) = _symone
 
-const sympi = Sym(sympy[:pi])
+const sympi = SymPy.sympy[:pi]
 
 
 # import SymPy.cse
@@ -33,8 +34,8 @@ export retype_cse
 
 function jlcode(expr::Sym)
     codestr = SymPy.sympy_meth(:ccode, expr)
-    codestr = replace(codestr, "pow", "^")
-    parse(codestr)
+    codestr = replace(codestr, "pow" => "^")
+    Meta.parse(codestr)
 end
 
 jlcode(exprvec::Vector{Sym}) = Expr(:vcat, [jlcode(e) for e in exprvec]...)
@@ -74,4 +75,4 @@ function genfunc(name, args::Vector, ret, ivs::Vector{Tuple{Sym,Sym}}; inbounds=
     end
 end
 
-genfunc{T}(name, args::Vector, ret::Tuple{Vector{Tuple{Sym,Sym}}, T}; inbounds=false, overret=nothing) = genfunc(name, args::Vector, ret[2], ret[1]; inbounds=inbounds, overret=overret)
+genfunc(name, args::Vector, ret::Tuple{Vector{Tuple{Sym,Sym}}, T}; inbounds=false, overret=nothing) where T = genfunc(name, args::Vector, ret[2], ret[1]; inbounds=inbounds, overret=overret)

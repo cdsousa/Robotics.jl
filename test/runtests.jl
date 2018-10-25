@@ -1,5 +1,5 @@
 using Robotics
 
-using Base.Test
+using Test
 
 include("checkpuma.jl")

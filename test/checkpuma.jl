@@ -1,5 +1,6 @@
-
 import Robotics: skew
+
+using LinearAlgebra
 
 puma560_dhparams(q) =
          [[  pi/2,        0,         0,   q[1]],
@@ -41,7 +42,7 @@ If = [vectosymm(cI2sI(ci)) for ci in cI]
 
 l = Vector{Float64}[m[i]*r[i] for i in 1:dof]
 
-symmetrize! = x->Base.LinAlg.copytri!(x, 'U')
+symmetrize! = x->LinearAlgebra.copytri!(x, 'U')
 L = Matrix{Float64}[symmetrize!(If[i] + m[i]*skew(r[i])'*skew(r[i])) for i in 1:dof]
 
 
@@ -66,7 +67,7 @@ dynparms_ok = [0.0, -0, -0, 0.34999999999999998, -0, 0.0, 0.0, 0.0, 0.0, 0, 1.03
                     4.0000000000000003e-05, 0.0, 0.0, 0.0028799999999999997, 0.09]
 
 
-@test_approx_eq_eps dynp dynparms_ok 1e-10
+@test dynp ≈ dynparms_ok
 
 
 ### Geometry ###
@@ -85,7 +86,7 @@ T_ok = [-0.655113870655343 -0.474277925274361 -0.588120962109346 0.0540498757911
          0.543960528264717 -0.836310025215453 0.0685017183295358  0.568944734102513
                        0.0                0.0                0.0                1.0]
 
-@test_approx_eq_eps T_test[end] T_ok 1e-10
+@test T_test[end] ≈ T_ok
 
 
 ### Dynamics ###
@@ -101,4 +102,4 @@ tau_ok = [  0.986185688341252
           -0.0208972707132494
           5.59805923645945e-5]
 
-@test_approx_eq_eps tau_test tau_ok 1e-10
+@test tau_test ≈ tau_ok

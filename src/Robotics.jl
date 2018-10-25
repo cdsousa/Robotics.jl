@@ -1,11 +1,12 @@
 module Robotics
 
+using LinearAlgebra
+
 include("utils.jl")
 include("geometry.jl")
 include("dynamics.jl")
 include("linalgutils.jl")
-if Pkg.installed("SymPy") != nothing
-    include("codegen.jl")
-end
+
+include("codegen.jl")
 
 end # module

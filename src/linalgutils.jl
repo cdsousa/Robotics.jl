@@ -18,7 +18,7 @@ function dependcol(Hs, prec=10)
     np = size(Hs, 2)
 
     Q1, R1 = qr(Hs)
-    R1_diag = round(diag(R1), prec)
+    R1_diag = round.(diag(R1), digits=prec)
 
     dbi = Int[]
     ddi = Int[]
@@ -31,7 +31,7 @@ function dependcol(Hs, prec=10)
     end
     dbn = length(dbi)
 
-    P = eye(Int, np)[:, [dbi; ddi]]
+    P = Matrix{Int}(I, np, np)[:, [dbi; ddi]]
     Pb = P[:, 1:dbn]
     Pd = P[:, dbn+1:end]
 
@@ -39,8 +39,7 @@ function dependcol(Hs, prec=10)
     Rb1 = Rbd1[1:dbn, 1:dbn]
     Rd1 = Rbd1[1:dbn, dbn+1:end]
 
-    Kd = round(inv(Rb1) * Rd1, prec)
+    Kd = round.(inv(Rb1) * Rd1, digits=prec)
 
     Pb, Pd, Kd
 end
-
